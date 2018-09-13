@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: speciality-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: speciality
+        version: v1
+    spec:
+      containers:
+      - name: speciality
+        image: harins/spring-petclinic-speciality-rest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - name: http
+          containerPort: 9966
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: speciality
+  labels:
+    app: speciality
+spec:
+  selector:
+    app: speciality
+  ports:
+  - name: http
+    port: 9966
+    targetPort: 9966

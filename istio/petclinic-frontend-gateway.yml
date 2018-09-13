@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: petclinic-frontend-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: petclinic-frontend
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - petclinic-frontend-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /petclinic
+    route:
+    - destination:
+        host: frontend.default.svc.cluster.local
+        port:
+          number: 80

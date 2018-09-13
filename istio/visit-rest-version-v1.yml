@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: visit-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: visit
+        version: v1
+    spec:
+      containers:
+      - name: visit
+        image: harins/spring-petclinic-visit-rest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - name: http
+          containerPort: 9966
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: visit
+  labels:
+    app: visit
+spec:
+  selector:
+    app: visit
+  ports:
+  - name: http
+    port: 9966
+    targetPort: 9966

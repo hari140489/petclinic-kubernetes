@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: petclinic-speciality-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: petclinic-speciality
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - petclinic-speciality-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /petclinic/api/specialties/*
+    - uri:
+        prefix: /petclinic/api/specialties
+    route:
+    - destination:
+        host: speciality.default.svc.cluster.local
+        port:
+          number: 9966
